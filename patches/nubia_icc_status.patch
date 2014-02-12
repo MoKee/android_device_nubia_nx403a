@@ -1,0 +1,14 @@
+diff --git a/src/java/com/android/internal/telephony/RIL.java b/src/java/com/android/internal/telephony/RIL.java
+index 6859f52..00ef3fb 100644
+--- a/src/java/com/android/internal/telephony/RIL.java
++++ b/src/java/com/android/internal/telephony/RIL.java
+@@ -3271,6 +3271,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
+ 
+         if (!oldRil)
+             cardStatus.mImsSubscriptionAppIndex = p.readInt();
++			
++        int pin1 = p.readInt();
++        int pin2 = p.readInt();
+ 
+         int numApplications = p.readInt();
+ 
