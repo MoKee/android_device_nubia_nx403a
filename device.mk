@@ -41,6 +41,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/init.qcom.efs.sync.sh:system/etc/init.qcom.efs.sync.sh \
     $(LOCAL_PATH)/configs/init.qcom.fm.sh:system/etc/init.qcom.fm.sh \
     $(LOCAL_PATH)/configs/init.qcom.post_boot.sh:system/etc/init.qcom.post_boot.sh \
+    $(LOCAL_PATH)/configs/init.qcom.thermal_conf.sh:system/etc/init.qcom.thermal_conf.sh \
     $(LOCAL_PATH)/configs/usf_post_boot.sh:system/etc/usf_post_boot.sh \
     $(LOCAL_PATH)/configs/spn-conf.xml:system/etc/spn-conf.xml
 
@@ -55,7 +56,7 @@ PRODUCT_COPY_FILES += \
 
 # Thermald
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/thermald/thermald.conf:system/etc/thermald.conf \
+    $(LOCAL_PATH)/thermald/thermald.conf:system/etc/thermald-8064sm.conf \
     $(LOCAL_PATH)/thermald/thermal-engine.conf:system/etc/thermal-engine.conf
 
 # These are the hardware-specific features

@@ -2,8 +2,8 @@
 -include vendor/nubia/nx403a/BoardConfigVendor.mk
 
 # Flags
-TARGET_GLOBAL_CFLAGS += -mfpu=neon -mfloat-abi=softfp
-TARGET_GLOBAL_CPPFLAGS += -mfpu=neon -mfloat-abi=softfp
+TARGET_GLOBAL_CFLAGS += -mfpu=neon-vfpv4 -mfloat-abi=softfp
+TARGET_GLOBAL_CPPFLAGS += -mfpu=neon-vfpv4 -mfloat-abi=softfp
 
 TARGET_SPECIFIC_HEADER_PATH := device/nubia/nx403a/include
 
@@ -18,28 +18,22 @@ COMMON_GLOBAL_CFLAGS     += -DQCOM_HARDWARE -DQCOM_BSP
 
 # Architecture
 TARGET_ARCH := arm
-TARGET_ARCH_VARIANT      := armv7-a-neon
-TARGET_ARCH_VARIANT_CPU  := cortex-a9
-TARGET_CPU_ABI           := armeabi-v7a
-TARGET_CPU_ABI2          := armeabi
-TARGET_CPU_SMP           := true
-TARGET_CPU_VARIANT       := krait
-TARGET_BOARD_PLATFORM    := msm8960
-
-TARGET_MPDECISION_BOOST_SOCKET := /dev/socket/mpdecision/touchboost
+TARGET_ARCH_VARIANT       := armv7-a-neon
+TARGET_ARCH_VARIANT_CPU   := cortex-a9
+TARGET_CPU_ABI            := armeabi-v7a
+TARGET_CPU_ABI2           := armeabi
+TARGET_CPU_SMP            := true
+TARGET_CPU_VARIANT        := krait
+TARGET_BOARD_PLATFORM     := msm8960
+TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
 
 # Krait optimizations
 TARGET_USE_KRAIT_BIONIC_OPTIMIZATION := true
-TARGET_USE_KRAIT_PLD_SET             := true
-TARGET_KRAIT_BIONIC_PLDOFFS          := 10
-TARGET_KRAIT_BIONIC_PLDTHRESH        := 10
-TARGET_KRAIT_BIONIC_BBTHRESH         := 64
-TARGET_KRAIT_BIONIC_PLDSIZE          := 64
 
 # Bootloader
 TARGET_NO_BOOTLOADER         := true
 TARGET_BOOTLOADER_NAME       := nx403a
-TARGET_BOOTLOADER_BOARD_NAME := nx403a
+TARGET_BOOTLOADER_BOARD_NAME := MSM8960
 TARGET_BOARD_INFO_FILE       := device/nubia/nx403a/board-info.txt
 
 # Others
@@ -83,14 +77,13 @@ TARGET_USES_QCOM_COMPRESSED_AUDIO := true
 TARGET_USES_ION             := true
 USE_OPENGL_RENDERER         := true
 TARGET_USES_C2D_COMPOSITION := true
-#TARGET_USES_OVERLAY         := true
-#TARGET_USES_SF_BYPASS       := true
+NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 
 # Compatibility with pre-kitkat Qualcomm sensor HALs
 SENSORS_NEED_SETRATE_ON_ENABLE := true
 
 # Camera
-COMMON_GLOBAL_CFLAGS += -DDISABLE_HW_ID_MATCH_CHECK -DQCOM_BSP_CAMERA_ABI_HACK -DNEEDS_VECTORIMPL_SYMBOLS
+COMMON_GLOBAL_CFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS
 
 # Webkit
 ENABLE_WEBGL            := true
@@ -112,10 +105,6 @@ BOARD_HAVE_BLUETOOTH                        := true
 BOARD_HAVE_BLUETOOTH_QCOM                   := true
 BLUETOOTH_HCI_USE_MCT                       := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/nubia/nx403a/bluetooth
-
-# Power
-TARGET_USES_CM_POWERHAL        := true
-TARGET_POWERHAL_NO_TOUCH_BOOST := true
 
 # RIL class
 BOARD_RIL_CLASS := ../../../device/nubia/nx403a/telephony-common/

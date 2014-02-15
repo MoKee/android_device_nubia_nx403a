@@ -21,11 +21,15 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
 
 # Inherit from our custom product configuration
-$(call inherit-product, vendor/cm/config/common.mk)
+$(call inherit-product, vendor/cm/config/common_full_phone.mk)
 $(call inherit-product, vendor/cm/config/cdma.mk)
 
 # Inherit from hardware-specific part of the product configuration
 $(call inherit-product, device/nubia/nx403a/device.mk)
+
+# Boot animation
+TARGET_SCREEN_HEIGHT := 1280
+TARGET_SCREEN_WIDTH := 768
 
 PRODUCT_NAME := cm_nx403a
 PRODUCT_DEVICE := nx403a
