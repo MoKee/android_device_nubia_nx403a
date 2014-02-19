@@ -86,7 +86,6 @@ persist.sys.strictmode.visual=0
 
 #ro.telephony.ril_class=QualcommSharedRIL
 ro.telephony.ril.v3=qcomdsds
-telephony.lteOnCdmaDevice=1
 persist.radio.tdscdma_present=2
 ro.telephony.default_network=7
 ro.cdma.home.operator.numeric=46003

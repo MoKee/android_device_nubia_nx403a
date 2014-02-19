@@ -15,4 +15,4 @@
 #
 
 add_lunch_combo cm_nx403a-userdebug
-add_lunch_combo aosp_nx403a-userdebug
+#add_lunch_combo aosp_nx403a-userdebug

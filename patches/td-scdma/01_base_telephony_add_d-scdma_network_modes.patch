@@ -1,0 +1,451 @@
+diff --git a/core/java/android/net/MobileDataStateTracker.java b/core/java/android/net/MobileDataStateTracker.java
+index c106514..1c04f16 100644
+--- a/core/java/android/net/MobileDataStateTracker.java
++++ b/core/java/android/net/MobileDataStateTracker.java
+@@ -398,6 +398,7 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
+             networkTypeStr = "edge";
+             break;
+         case TelephonyManager.NETWORK_TYPE_UMTS:
++        case TelephonyManager.NETWORK_TYPE_TD_SCDMA:
+             networkTypeStr = "umts";
+             break;
+         case TelephonyManager.NETWORK_TYPE_HSDPA:
+@@ -880,6 +881,7 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
+             case TelephonyManager.NETWORK_TYPE_EDGE:
+             case TelephonyManager.NETWORK_TYPE_GPRS:
+             case TelephonyManager.NETWORK_TYPE_UMTS:
++            case TelephonyManager.NETWORK_TYPE_TD_SCDMA:
+             case TelephonyManager.NETWORK_TYPE_HSDPA:
+             case TelephonyManager.NETWORK_TYPE_HSUPA:
+             case TelephonyManager.NETWORK_TYPE_HSPA:
+diff --git a/telephony/java/android/telephony/ServiceState.java b/telephony/java/android/telephony/ServiceState.java
+index adf058c..4e39c04 100644
+--- a/telephony/java/android/telephony/ServiceState.java
++++ b/telephony/java/android/telephony/ServiceState.java
+@@ -148,6 +148,11 @@ public class ServiceState implements Parcelable {
+      * @hide
+      */
+     public static final int RIL_RADIO_TECHNOLOGY_GSM = 16;
++    /**
++     * TD-SCDMA
++     * @hide
++     */
++    public static final int RIL_RADIO_TECHNOLOGY_TD_SCDMA = 17;
+ 
+     /**
+      * Available registration states for GSM, UMTS and CDMA.
+@@ -536,6 +541,9 @@ public class ServiceState implements Parcelable {
+             case RIL_RADIO_TECHNOLOGY_GSM:
+                 rtString = "GSM";
+                 break;
++            case RIL_RADIO_TECHNOLOGY_TD_SCDMA:
++                rtString = "TD-SCDMA";
++                break;
+             default:
+                 rtString = "Unexpected";
+                 Rlog.w(LOG_TAG, "Unexpected radioTechnology=" + rt);
+@@ -801,6 +809,8 @@ public class ServiceState implements Parcelable {
+         case ServiceState.RIL_RADIO_TECHNOLOGY_HSPAP:
+         case ServiceState.RIL_RADIO_TECHNOLOGY_DCHSPAP:
+             return TelephonyManager.NETWORK_TYPE_HSPAP;
++        case ServiceState.RIL_RADIO_TECHNOLOGY_TD_SCDMA:
++            return TelephonyManager.NETWORK_TYPE_TD_SCDMA;
+         default:
+             return TelephonyManager.NETWORK_TYPE_UNKNOWN;
+         }
+@@ -851,7 +861,8 @@ public class ServiceState implements Parcelable {
+                 || radioTechnology == RIL_RADIO_TECHNOLOGY_LTE
+                 || radioTechnology == RIL_RADIO_TECHNOLOGY_HSPAP
+                 || radioTechnology == RIL_RADIO_TECHNOLOGY_DCHSPAP
+-                || radioTechnology == RIL_RADIO_TECHNOLOGY_GSM;
++                || radioTechnology == RIL_RADIO_TECHNOLOGY_GSM
++                || radioTechnology == RIL_RADIO_TECHNOLOGY_TD_SCDMA;
+     }
+ 
+     /** @hide */
+diff --git a/telephony/java/android/telephony/SignalStrength.java b/telephony/java/android/telephony/SignalStrength.java
+index 9958f52..199723f 100644
+--- a/telephony/java/android/telephony/SignalStrength.java
++++ b/telephony/java/android/telephony/SignalStrength.java
+@@ -63,6 +63,7 @@ public class SignalStrength implements Parcelable {
+     private int mLteRsrq;
+     private int mLteRssnr;
+     private int mLteCqi;
++    private int mTdScdmaRscp;
+ 
+     private boolean isGsm; // This value is set by the ServiceStateTracker onSignalStrengthResult
+ 
+@@ -102,6 +103,7 @@ public class SignalStrength implements Parcelable {
+         mLteRsrq = INVALID;
+         mLteRssnr = INVALID;
+         mLteCqi = INVALID;
++        mTdScdmaRscp = INVALID;
+         isGsm = true;
+     }
+ 
+@@ -126,6 +128,7 @@ public class SignalStrength implements Parcelable {
+         mLteRsrq = INVALID;
+         mLteRssnr = INVALID;
+         mLteCqi = INVALID;
++        mTdScdmaRscp = INVALID;
+         isGsm = gsmFlag;
+     }
+ 
+@@ -138,6 +141,22 @@ public class SignalStrength implements Parcelable {
+             int cdmaDbm, int cdmaEcio,
+             int evdoDbm, int evdoEcio, int evdoSnr,
+             int lteSignalStrength, int lteRsrp, int lteRsrq, int lteRssnr, int lteCqi,
++            int tdScdmaRscp, boolean gsmFlag) {
++        initialize(gsmSignalStrength, gsmBitErrorRate, cdmaDbm, cdmaEcio,
++                   evdoDbm, evdoEcio, evdoSnr, lteSignalStrength, lteRsrp,
++                   lteRsrq, lteRssnr, lteCqi, gsmFlag);
++        mTdScdmaRscp = tdScdmaRscp;
++    }
++
++    /**
++     * Constructor
++     *
++     * @hide
++     */
++    public SignalStrength(int gsmSignalStrength, int gsmBitErrorRate,
++            int cdmaDbm, int cdmaEcio,
++            int evdoDbm, int evdoEcio, int evdoSnr,
++            int lteSignalStrength, int lteRsrp, int lteRsrq, int lteRssnr, int lteCqi,
+             boolean gsmFlag) {
+         initialize(gsmSignalStrength, gsmBitErrorRate, cdmaDbm, cdmaEcio,
+                 evdoDbm, evdoEcio, evdoSnr, lteSignalStrength, lteRsrp,
+@@ -228,6 +247,7 @@ public class SignalStrength implements Parcelable {
+         mLteRsrq = lteRsrq;
+         mLteRssnr = lteRssnr;
+         mLteCqi = lteCqi;
++        mTdScdmaRscp = INVALID;
+         isGsm = gsm;
+         if (DBG) log("initialize: " + toString());
+     }
+@@ -248,6 +268,7 @@ public class SignalStrength implements Parcelable {
+         mLteRsrq = s.mLteRsrq;
+         mLteRssnr = s.mLteRssnr;
+         mLteCqi = s.mLteCqi;
++        mTdScdmaRscp = s.mTdScdmaRscp;
+         isGsm = s.isGsm;
+     }
+ 
+@@ -271,6 +292,7 @@ public class SignalStrength implements Parcelable {
+         mLteRsrq = in.readInt();
+         mLteRssnr = in.readInt();
+         mLteCqi = in.readInt();
++        mTdScdmaRscp = in.readInt();
+         isGsm = (in.readInt() != 0);
+     }
+ 
+@@ -297,6 +319,7 @@ public class SignalStrength implements Parcelable {
+         ss.mLteRsrq = in.readInt();
+         ss.mLteRssnr = in.readInt();
+         ss.mLteCqi = in.readInt();
++        ss.mTdScdmaRscp = in.readInt();
+ 
+         return ss;
+     }
+@@ -317,6 +340,7 @@ public class SignalStrength implements Parcelable {
+         out.writeInt(mLteRsrq);
+         out.writeInt(mLteRssnr);
+         out.writeInt(mLteCqi);
++        out.writeInt(mTdScdmaRscp);
+         out.writeInt(isGsm ? 1 : 0);
+     }
+ 
+@@ -372,6 +396,10 @@ public class SignalStrength implements Parcelable {
+         mLteRsrq = ((mLteRsrq >= 3) && (mLteRsrq <= 20)) ? -mLteRsrq : SignalStrength.INVALID;
+         mLteRssnr = ((mLteRssnr >= -200) && (mLteRssnr <= 300) && !(mLteRsrq == SignalStrength.INVALID && mLteRssnr == -1)) ? mLteRssnr
+                 : SignalStrength.INVALID;
++
++        mTdScdmaRscp = ((mTdScdmaRscp >= 25) && (mTdScdmaRscp <= 120))
++                ? -mTdScdmaRscp : SignalStrength.INVALID;
++
+         // Cqi no change
+         if (DBG) log("Signal after validate=" + this);
+     }
+@@ -479,14 +507,17 @@ public class SignalStrength implements Parcelable {
+      * @hide
+      */
+     public int getLevel() {
+-        int level;
++        int level = 0;
+ 
+         if (isGsm) {
+             boolean lteChecks = (getLteRsrp() == INVALID && getLteRsrq() == INVALID && getLteRssnr() == INVALID && getLteSignalStrength() == 99);
+             boolean oldRil = needsOldRilFeature("signalstrength");
+             level = getLteLevel();
+-            if ((level == SIGNAL_STRENGTH_NONE_OR_UNKNOWN && getGsmAsuLevel() != 99 && lteChecks) || oldRil) {
+-                level = getGsmLevel();
++            if ((level == SIGNAL_STRENGTH_NONE_OR_UNKNOWN && (getGsmAsuLevel() != 99 || getTdScdmaAsuLevel() != 255) && lteChecks) || oldRil) {
++                level = getTdScdmaLevel();
++                if (level == SIGNAL_STRENGTH_NONE_OR_UNKNOWN) {
++                    level = getGsmLevel();
++                }
+             }
+         } else {
+             int cdmaLevel = getCdmaLevel();
+@@ -516,8 +547,12 @@ public class SignalStrength implements Parcelable {
+         if (isGsm) {
+             boolean oldRil = needsOldRilFeature("signalstrength");
+             boolean lteChecks = (getLteRsrp() == INVALID && getLteRsrq() == INVALID && getLteRssnr() == INVALID && getLteSignalStrength() == 99);
+-            if ((getLteLevel() == SIGNAL_STRENGTH_NONE_OR_UNKNOWN && getGsmAsuLevel() != 99 && lteChecks) || oldRil) {
+-                asuLevel = getGsmAsuLevel();
++            if ((getLteLevel() == SIGNAL_STRENGTH_NONE_OR_UNKNOWN && (getGsmAsuLevel() != 99 || getTdScdmaAsuLevel() != 255) && lteChecks) || oldRil) {
++                if (getTdScdmaLevel() == SIGNAL_STRENGTH_NONE_OR_UNKNOWN) {
++                    asuLevel = getGsmAsuLevel();
++                } else {
++                    asuLevel = getTdScdmaAsuLevel();
++                }
+             } else {
+                 asuLevel = getLteAsuLevel();
+             }
+@@ -545,13 +580,17 @@ public class SignalStrength implements Parcelable {
+      * @hide
+      */
+     public int getDbm() {
+-        int dBm;
++        int dBm = INVALID;
+ 
+         if(isGsm()) {
+             boolean oldRil = needsOldRilFeature("signalstrength");
+             boolean lteChecks = (getLteRsrp() == INVALID && getLteRsrq() == INVALID && getLteRssnr() == INVALID && getLteSignalStrength() == 99);
+-            if ((getLteLevel() == SIGNAL_STRENGTH_NONE_OR_UNKNOWN && getGsmAsuLevel() != 99 && lteChecks) || oldRil) {
+-                dBm = getGsmDbm();
++            if ((getLteLevel() == SIGNAL_STRENGTH_NONE_OR_UNKNOWN && (getGsmAsuLevel() != 99 || getTdScdmaAsuLevel() != 255) && lteChecks) || oldRil) {
++                if (getTdScdmaLevel() == SIGNAL_STRENGTH_NONE_OR_UNKNOWN) {
++                    dBm = getGsmDbm();
++                } else {
++                    dBm = getTdScdmaDbm();
++                }
+             } else {
+                 dBm = getLteDbm();
+             }
+@@ -693,15 +732,15 @@ public class SignalStrength implements Parcelable {
+         int levelEvdoDbm;
+         int levelEvdoSnr;
+ 
+-        if (evdoDbm >= -65) levelEvdoDbm = SIGNAL_STRENGTH_GREAT;
+-        else if (evdoDbm >= -75) levelEvdoDbm = SIGNAL_STRENGTH_GOOD;
+-        else if (evdoDbm >= -90) levelEvdoDbm = SIGNAL_STRENGTH_MODERATE;
++        if (evdoDbm >= -75) levelEvdoDbm = SIGNAL_STRENGTH_GREAT;
++        else if (evdoDbm >= -85) levelEvdoDbm = SIGNAL_STRENGTH_GOOD;
++        else if (evdoDbm >= -95) levelEvdoDbm = SIGNAL_STRENGTH_MODERATE;
+         else if (evdoDbm >= -105) levelEvdoDbm = SIGNAL_STRENGTH_POOR;
+         else levelEvdoDbm = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+ 
+-        if (evdoSnr >= 7) levelEvdoSnr = SIGNAL_STRENGTH_GREAT;
+-        else if (evdoSnr >= 5) levelEvdoSnr = SIGNAL_STRENGTH_GOOD;
+-        else if (evdoSnr >= 3) levelEvdoSnr = SIGNAL_STRENGTH_MODERATE;
++        if (evdoSnr >= 6) levelEvdoSnr = SIGNAL_STRENGTH_GREAT;
++        else if (evdoSnr >= 4) levelEvdoSnr = SIGNAL_STRENGTH_GOOD;
++        else if (evdoSnr >= 2) levelEvdoSnr = SIGNAL_STRENGTH_MODERATE;
+         else if (evdoSnr >= 1) levelEvdoSnr = SIGNAL_STRENGTH_POOR;
+         else levelEvdoSnr = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+ 
+@@ -721,17 +760,17 @@ public class SignalStrength implements Parcelable {
+         int levelEvdoDbm;
+         int levelEvdoSnr;
+ 
+-        if (evdoDbm >= -65) levelEvdoDbm = 16;
+-        else if (evdoDbm >= -75) levelEvdoDbm = 8;
+-        else if (evdoDbm >= -85) levelEvdoDbm = 4;
++        if (evdoDbm >= -75) levelEvdoDbm = 16;
++        else if (evdoDbm >= -82) levelEvdoDbm = 8;
++        else if (evdoDbm >= -90) levelEvdoDbm = 4;
+         else if (evdoDbm >= -95) levelEvdoDbm = 2;
+         else if (evdoDbm >= -105) levelEvdoDbm = 1;
+         else levelEvdoDbm = 99;
+ 
+-        if (evdoSnr >= 7) levelEvdoSnr = 16;
+-        else if (evdoSnr >= 6) levelEvdoSnr = 8;
+-        else if (evdoSnr >= 5) levelEvdoSnr = 4;
+-        else if (evdoSnr >= 3) levelEvdoSnr = 2;
++        if (evdoSnr >= 6) levelEvdoSnr = 16;
++        else if (evdoSnr >= 5) levelEvdoSnr = 8;
++        else if (evdoSnr >= 4) levelEvdoSnr = 4;
++        else if (evdoSnr >= 2) levelEvdoSnr = 2;
+         else if (evdoSnr >= 1) levelEvdoSnr = 1;
+         else levelEvdoSnr = 99;
+ 
+@@ -848,6 +887,54 @@ public class SignalStrength implements Parcelable {
+     }
+ 
+     /**
++     * @return get TD_SCDMA dbm
++     *
++     * @hide
++     */
++    public int getTdScdmaDbm() {
++        return this.mTdScdmaRscp;
++    }
++
++    /**
++     * Get TD-SCDMA as level 0..4
++     * Range : 25 to 120
++     * INT_MAX: 0x7FFFFFFF denotes invalid value
++     * Reference: 3GPP TS 25.123, section 9.1.1.1
++     *
++     * @hide
++     */
++    public int getTdScdmaLevel() {
++        final int tdScdmaDbm = getTdScdmaDbm();
++        int level;
++
++        if ((tdScdmaDbm > -25) || (tdScdmaDbm == SignalStrength.INVALID))
++                level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
++        else if (tdScdmaDbm >= -49) level = SIGNAL_STRENGTH_GREAT;
++        else if (tdScdmaDbm >= -73) level = SIGNAL_STRENGTH_GOOD;
++        else if (tdScdmaDbm >= -97) level = SIGNAL_STRENGTH_MODERATE;
++        else if (tdScdmaDbm >= -120) level = SIGNAL_STRENGTH_POOR;
++        else level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
++
++        if (DBG) log("getTdScdmaLevel = " + level);
++        return level;
++     }
++
++    /**
++     * Get the TD-SCDMA signal level as an asu value.
++     *
++     * @hide
++     */
++    public int getTdScdmaAsuLevel() {
++        final int tdScdmaDbm = getTdScdmaDbm();
++        int tdScdmaAsuLevel;
++
++        if (tdScdmaDbm == INVALID) tdScdmaAsuLevel = 255;
++        else tdScdmaAsuLevel = tdScdmaDbm + 120;
++        if (DBG) log("TD-SCDMA Asu level: " + tdScdmaAsuLevel);
++        return tdScdmaAsuLevel;
++    }
++
++    /**
+      * @return hash code
+      */
+     @Override
+@@ -859,7 +946,7 @@ public class SignalStrength implements Parcelable {
+                 + (mEvdoDbm * primeNum) + (mEvdoEcio * primeNum) + (mEvdoSnr * primeNum)
+                 + (mLteSignalStrength * primeNum) + (mLteRsrp * primeNum)
+                 + (mLteRsrq * primeNum) + (mLteRssnr * primeNum) + (mLteCqi * primeNum)
+-                + (isGsm ? 1 : 0));
++                + (mTdScdmaRscp * primeNum) + (isGsm ? 1 : 0));
+     }
+ 
+     /**
+@@ -891,6 +978,7 @@ public class SignalStrength implements Parcelable {
+                 && mLteRsrq == s.mLteRsrq
+                 && mLteRssnr == s.mLteRssnr
+                 && mLteCqi == s.mLteCqi
++                && mTdScdmaRscp == s.mTdScdmaRscp
+                 && isGsm == s.isGsm);
+     }
+ 
+@@ -912,6 +1000,7 @@ public class SignalStrength implements Parcelable {
+                 + " " + mLteRsrq
+                 + " " + mLteRssnr
+                 + " " + mLteCqi
++                + " " + mTdScdmaRscp
+                 + " " + (isGsm ? "gsm|lte" : "cdma"));
+     }
+ 
+@@ -934,6 +1023,7 @@ public class SignalStrength implements Parcelable {
+         mLteRsrq = m.getInt("LteRsrq");
+         mLteRssnr = m.getInt("LteRssnr");
+         mLteCqi = m.getInt("LteCqi");
++        mTdScdmaRscp = m.getInt("TdScdma");
+         isGsm = m.getBoolean("isGsm");
+     }
+ 
+@@ -956,6 +1046,7 @@ public class SignalStrength implements Parcelable {
+         m.putInt("LteRsrq", mLteRsrq);
+         m.putInt("LteRssnr", mLteRssnr);
+         m.putInt("LteCqi", mLteCqi);
++        m.putInt("TdScdma", mTdScdmaRscp);
+         m.putBoolean("isGsm", Boolean.valueOf(isGsm));
+     }
+ 
+diff --git a/telephony/java/android/telephony/TelephonyManager.java b/telephony/java/android/telephony/TelephonyManager.java
+index 0dbd24d..0c68111 100644
+--- a/telephony/java/android/telephony/TelephonyManager.java
++++ b/telephony/java/android/telephony/TelephonyManager.java
+@@ -433,12 +433,22 @@ public class TelephonyManager {
+         case RILConstants.NETWORK_MODE_GSM_UMTS:
+         case RILConstants.NETWORK_MODE_LTE_GSM_WCDMA:
+         case RILConstants.NETWORK_MODE_LTE_WCDMA:
+-        case RILConstants.NETWORK_MODE_LTE_CMDA_EVDO_GSM_WCDMA:
++        case RILConstants.NETWORK_MODE_TD_SCDMA_ONLY:
++        case RILConstants.NETWORK_MODE_TD_SCDMA_WCDMA:
++        case RILConstants.NETWORK_MODE_TD_SCDMA_LTE:
++        case RILConstants.NETWORK_MODE_TD_SCDMA_GSM:
++        case RILConstants.NETWORK_MODE_TD_SCDMA_GSM_LTE:
++        case RILConstants.NETWORK_MODE_TD_SCDMA_GSM_WCDMA:
++        case RILConstants.NETWORK_MODE_TD_SCDMA_WCDMA_LTE:
++        case RILConstants.NETWORK_MODE_TD_SCDMA_GSM_WCDMA_LTE:
+             return PhoneConstants.PHONE_TYPE_GSM;
+ 
+         // Use CDMA Phone for the global mode including CDMA
+         case RILConstants.NETWORK_MODE_GLOBAL:
+         case RILConstants.NETWORK_MODE_LTE_CDMA_EVDO:
++        case RILConstants.NETWORK_MODE_LTE_CMDA_EVDO_GSM_WCDMA:
++        case RILConstants.NETWORK_MODE_TD_SCDMA_CDMA_EVDO_GSM_WCDMA:
++        case RILConstants.NETWORK_MODE_TD_SCDMA_LTE_CDMA_EVDO_GSM_WCDMA:
+             return PhoneConstants.PHONE_TYPE_CDMA;
+ 
+         case RILConstants.NETWORK_MODE_LTE_ONLY:
+@@ -620,6 +630,8 @@ public class TelephonyManager {
+     public static final int NETWORK_TYPE_EHRPD = 14;
+     /** Current network is HSPA+ */
+     public static final int NETWORK_TYPE_HSPAP = 15;
++    /** Current network is TD_SCDMA {@hide} */
++    public static final int NETWORK_TYPE_TD_SCDMA = 17;
+ 
+     /**
+      * @return the NETWORK_TYPE_xxxx for current data connection.
+@@ -649,6 +661,7 @@ public class TelephonyManager {
+      * @see #NETWORK_TYPE_LTE
+      * @see #NETWORK_TYPE_EHRPD
+      * @see #NETWORK_TYPE_HSPAP
++     * @see #NETWORK_TYPE_TD_SCDMA
+      *
+      * @hide
+      */
+@@ -736,6 +749,7 @@ public class TelephonyManager {
+             case NETWORK_TYPE_EVDO_B:
+             case NETWORK_TYPE_EHRPD:
+             case NETWORK_TYPE_HSPAP:
++            case NETWORK_TYPE_TD_SCDMA:
+                 return NETWORK_CLASS_3_G;
+             case NETWORK_TYPE_LTE:
+                 return NETWORK_CLASS_4_G;
+@@ -788,6 +802,8 @@ public class TelephonyManager {
+                 return "iDEN";
+             case NETWORK_TYPE_HSPAP:
+                 return "HSPA+";
++            case NETWORK_TYPE_TD_SCDMA:
++                return "TD-SCDMA";
+             default:
+                 return "UNKNOWN";
+         }
+diff --git a/telephony/java/com/android/internal/telephony/RILConstants.java b/telephony/java/com/android/internal/telephony/RILConstants.java
+index 068be85..a5d4df0 100644
+--- a/telephony/java/com/android/internal/telephony/RILConstants.java
++++ b/telephony/java/com/android/internal/telephony/RILConstants.java
+@@ -73,6 +73,17 @@ public interface RILConstants {
+     int NETWORK_MODE_LTE_CMDA_EVDO_GSM_WCDMA = 10; /* LTE, CDMA, EvDo, GSM/WCDMA */
+     int NETWORK_MODE_LTE_ONLY       = 11; /* LTE Only mode. */
+     int NETWORK_MODE_LTE_WCDMA      = 12; /* LTE/WCDMA */
++    int NETWORK_MODE_TD_SCDMA_ONLY            = 13; /* TD-SCDMA only */
++    int NETWORK_MODE_TD_SCDMA_WCDMA           = 14; /* TD-SCDMA and WCDMA */
++    int NETWORK_MODE_TD_SCDMA_LTE             = 15; /* TD-SCDMA and LTE */
++    int NETWORK_MODE_TD_SCDMA_GSM             = 16; /* TD-SCDMA and GSM */
++    int NETWORK_MODE_TD_SCDMA_GSM_LTE         = 17; /* TD-SCDMA,GSM and LTE */
++    int NETWORK_MODE_TD_SCDMA_GSM_WCDMA       = 18; /* TD-SCDMA, GSM/WCDMA */
++    int NETWORK_MODE_TD_SCDMA_WCDMA_LTE       = 19; /* TD-SCDMA, WCDMA and LTE */
++    int NETWORK_MODE_TD_SCDMA_GSM_WCDMA_LTE   = 20; /* TD-SCDMA, GSM/WCDMA and LTE */
++    int NETWORK_MODE_TD_SCDMA_CDMA_EVDO_GSM_WCDMA  = 21; /*TD-SCDMA,EvDo,CDMA,GSM/WCDMA*/
++    int NETWORK_MODE_TD_SCDMA_LTE_CDMA_EVDO_GSM_WCDMA = 22; /* TD-SCDMA/LTE/GSM/WCDMA, CDMA, and
++                                                               EvDo */
+     int PREFERRED_NETWORK_MODE      = NETWORK_MODE_WCDMA_PREF;
+ 
+     int CDMA_CELL_BROADCAST_SMS_DISABLED = 1;

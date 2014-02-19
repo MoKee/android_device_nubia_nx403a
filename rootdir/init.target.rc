@@ -113,30 +113,8 @@ service thermald /system/bin/thermald
    group root
    disabled
 
-service thermal-engine /system/bin/thermal-engine
-   class main
-   user root
-   group root
-   disabled
-
-on property:qcom.thermal=thermald
-    start thermald
-
-on property:qcom.thermal=thermal-engine
-    start thermal-engine
-
 service mpdecision /system/bin/mpdecision --no_sleep --avg_comp
    user root
-   disabled
-
-service rf4ce /system/bin/rf4ce
-   class main
-   user root
-   group root
-
-service qosmgrd /system/bin/qosmgr /system/etc/qosmgr_rules.xml
-   user system
-   group system
    disabled
 
 service kickstart /system/bin/qcks -i /firmware/image/
@@ -226,26 +204,6 @@ service time_daemon /system/bin/time_daemon
     group root
     oneshot
     disabled
-
-on property:sys.power_profile=middle
-    setprop sys.cpu.max_freq 1512000
-    write /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay 100000
-    write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 80
-    write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 40000
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1512000
-	#write /sys/class/leds/lcd-backlight/max_brightness 255
-    write /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/max_gpuclk 400000000
-    start mpdecision
-
-on property:sys.power_profile=low
-    setprop sys.cpu.max_freq 918000
-    write /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay 100000
-    write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 90
-    write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 20000
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 918000
-	#write /sys/class/leds/lcd-backlight/max_brightness 80
-    write /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/max_gpuclk 200000000
-    start mpdecision
 
 on property:persist.timed.enable=true
     start time_daemon

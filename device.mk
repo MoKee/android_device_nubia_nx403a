@@ -250,7 +250,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # common build.props
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp,adb
+    persist.sys.usb.config=mass_storage,adb
 
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.apm_sim_not_pwdn=1 \

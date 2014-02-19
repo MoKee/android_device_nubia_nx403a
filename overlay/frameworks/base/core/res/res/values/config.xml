@@ -309,7 +309,4 @@
     <!-- Device supports LED flashlight -->
     <bool name="config_enableTorch">true</bool>
 
-    <!-- Enable overlay for all location components. -->
-    <bool name="config_enableNetworkLocationOverlay" translatable="false">false</bool>
-    <bool name="config_enableFusedLocationOverlay" translatable="false">false</bool>
 </resources>

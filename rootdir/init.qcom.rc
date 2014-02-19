@@ -263,6 +263,13 @@ on post-fs-data
 
     setprop vold.post_fs_data_done 1
 
+    #Create directories for gpsone_daemon services
+    mkdir /data/misc/gpsone_d 0770 system gps
+
+    #Create directories for QuIPS
+    mkdir /data/misc/quipc 0770 gps system
+
+
 # Export GPIO56 for fusion targets to enable/disable hub
 service usbhub_init /system/bin/usbhub_init
    class late_start
@@ -371,13 +378,6 @@ service bt-dun /system/bin/sh /system/etc/init.qcom.btdun.sh
     class late_start
     user bluetooth
     group bluetooth net_bt_admin inet
-    disabled
-    oneshot
-
-service bt-sap /system/bin/sapd 15
-    user bluetooth
-    group bluetooth net_bt_admin
-    class late_start
     disabled
     oneshot
 
@@ -514,34 +514,10 @@ service gpsone_daemon /system/bin/gpsone_daemon
     group gps qcom_oncrpc inet net_raw
     disabled
 
-service quipc_igsn /system/bin/quipc_igsn
-    class late_start
-    user gps
-    group inet gps
-    disabled
-
-service quipc_main /system/bin/quipc_main
-    class late_start
-    user gps
-    group gps net_admin wifi inet
-    disabled
-
 service location_mq /system/bin/location-mq
     class late_start
     user gps
     group gps
-    disabled
-
-service xtwifi_inet /system/bin/xtwifi-inet-agent
-    class late_start
-    user gps
-    group inet gps
-    disabled
-
-service xtwifi_client /system/bin/xtwifi-client
-    class late_start
-    user gps
-    group net_admin wifi inet gps
     disabled
 
 service lowi-server /system/bin/lowi-server
@@ -564,12 +540,6 @@ on property:crypto.driver.load=1
 on property:crypto.driver.load=0
      exec /system/bin/rmmod qcedev.ko
      exec /system/bin/rmmod qce.ko
-
-service drmdiag /system/bin/drmdiagapp
-    class late_start
-     user root
-     disabled
-     oneshot
 
 on property:drmdiag.load=1
     start drmdiag
@@ -603,6 +573,8 @@ service wifi-crda /system/bin/sh /system/etc/init.crda.sh
 
 on property:sys.boot_completed=1
     start qcom-post-boot
+    start gpsone_daemon
+    start location_mq
 
 service atfwd /system/bin/ATFWD-daemon
     class late_start
@@ -614,12 +586,6 @@ service hdmid /system/bin/hdmid
     class late_start
     socket hdmid stream 0660 root system graphics
     disabled
-
-service ppd /system/bin/mm-pp-daemon
-    class late_start
-    user system
-    socket pps stream 0660 system system graphics
-    group system graphics
 
 service hostapd /system/bin/hostapd -dddd /data/hostapd/hostapd.conf
     class late_start
@@ -649,10 +615,6 @@ on property:ro.data.large_tcp_window_size=true
     # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
     write /proc/sys/net/ipv4/tcp_adv_win_scale  2
 
-service battery_monitor /system/bin/battery_monitor
-    user system
-    group system
-    disabled
 
 service ril-daemon1 /system/bin/rild -c 1
     class main
@@ -661,12 +623,6 @@ service ril-daemon1 /system/bin/rild -c 1
     user root
     disabled
     group radio cache inet misc audio sdcard_r sdcard_rw qcom_oncrpc diag qcom_diag log
-
-service profiler_daemon /system/bin/profiler_daemon
-    class late_start
-    user root
-    group root
-    disabled
 
 service fuse_sdcard0 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0
     class late_start
@@ -730,15 +686,5 @@ service diag_mdlog_stop /system/bin/diag_mdlog -k
 service akmd /system/bin/akmd8963 -o 1
 	class main
 	oneshot
-# ZTEMT ADD by zhubing END
 
-#ZTEMT ADD by zhangxinghua 2012-11-29 for image enhance
-on property:persist.sys.image.enhance=w
-    write /sys/kernel/lcd_intensity/intensity 24
-	
-on property:persist.sys.image.enhance=n
-    write /sys/kernel/lcd_intensity/intensity 25
-	
-on property:persist.sys.image.enhance=i
-    write /sys/kernel/lcd_intensity/intensity 26	
-#ZTEMT END
+
