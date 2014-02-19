@@ -27,14 +27,6 @@ ifneq ($(filter nx403a,$(TARGET_DEVICE)),)
 
 LOCAL_PATH := $(call my-dir)
 
-include $(CLEAR_VARS)
-LOCAL_MODULE       := recovery.fstab
-LOCAL_MODULE_TAGS  := optional
-LOCAL_MODULE_CLASS := RECOVERY_EXECUTABLES
-LOCAL_MODULE_PATH  := $(TARGET_RECOVERY_ROOT_OUT)/etc
-LOCAL_SRC_FILES    := $(LOCAL_MODULE)
-include $(BUILD_PREBUILT)
-
 include $(call all-makefiles-under,$(LOCAL_PATH))
 
 endif

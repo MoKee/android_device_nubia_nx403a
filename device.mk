@@ -115,8 +115,9 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/gps/xtwifi.conf:system/etc/xtwifi.conf
 
 # TWRP fstab
-PRODUCT_PACKAGES += recovery.fstab
-
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/recovery.fstab:recovery/root/etc/recovery.fstab
+    
 # RAMDISK
 PRODUCT_PACKAGES += fstab.qcom
 PRODUCT_PACKAGES += init.qcom.rc
@@ -130,8 +131,6 @@ PRODUCT_PACKAGES += init.qcom.class_core.sh
 PRODUCT_PACKAGES += init.qcom.class_main.sh
 PRODUCT_PACKAGES += init.qcom.early_boot.sh
 PRODUCT_PACKAGES += init.qcom.syspart_fixup.sh
-#PRODUCT_PACKAGES += init.nubia.ums_adb.sh
-#PRODUCT_PACKAGES += init.nubia.usb.rc
 
 # Boot charger
 PRODUCT_PACKAGES += \

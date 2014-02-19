@@ -38,6 +38,7 @@ bin/usbhub
 bin/usbhub_init
 bin/usf_epos
 bin/usf_tester
+bin/location-mq
 
 etc/firmware/a225_pfp.fw
 etc/firmware/a225_pm4.fw
@@ -140,7 +141,6 @@ lib/libgemini.so
 lib/libgps.utils.so
 lib/libgsl.so
 lib/libidl.so
-lib/libhardware.so
 lib/libimage-jpeg-enc-omx-comp.so
 lib/libimage-omx-common.so
 lib/libllvm-a3xx.so
@@ -208,6 +208,8 @@ lib/libtime_genoff.so
 lib/libthermalclient.so
 lib/libxml.so
 lib/qnet-plugin.so
+lib/libgeofence.so
+lib/libExtendedExtractor.so
 
 lib/hw/camera.msm8960.so
 lib/hw/gps.default.so
