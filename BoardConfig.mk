@@ -29,6 +29,11 @@ TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
 
 # Krait optimizations
 TARGET_USE_KRAIT_BIONIC_OPTIMIZATION := true
+TARGET_USE_KRAIT_PLD_SET             := true
+TARGET_KRAIT_BIONIC_PLDOFFS          := 10
+TARGET_KRAIT_BIONIC_PLDTHRESH        := 10
+TARGET_KRAIT_BIONIC_BBTHRESH         := 64
+TARGET_KRAIT_BIONIC_PLDSIZE          := 64
 
 # Bootloader
 TARGET_NO_BOOTLOADER         := true
@@ -113,13 +118,14 @@ BOARD_RIL_CLASS := ../../../device/nubia/nx403a/telephony-common/
 # Recovery
 TARGET_RECOVERY_FSTAB           := device/nubia/nx403a/rootdir/fstab.qcom
 RECOVERY_FSTAB_VERSION          := 2
+BOARD_SUPPRESS_SECURE_ERASE     := true
 BOARD_HAS_NO_SELECT_BUTTON      := true
 BOARD_HAS_LARGE_FILESYSTEM      := true
 BORAD_REC_LANG_CHINESE          := true
 TARGET_RECOVERY_PIXEL_FORMAT    := "RGBX_8888"
 TARGET_RECOVERY_INITRC         := device/nubia/nx403a/recovery/init.rc
-#BOARD_CUSTOM_GRAPHICS           := ../../../device/nubia/nx403a/recovery/graphics.c
-#BOARD_USE_CUSTOM_RECOVERY_FONT  := \"roboto_15x24.h\"
+BOARD_CUSTOM_GRAPHICS           := ../../../device/nubia/nx403a/recovery/graphics.c
+BOARD_USE_CUSTOM_RECOVERY_FONT  := \"roboto_15x24.h\"
 TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/platform/msm_hsusb/gadget/lun%d/file"
 
 # TWRP Recovery

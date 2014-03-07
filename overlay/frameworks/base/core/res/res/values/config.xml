@@ -127,18 +127,10 @@
          than the size of the config_autoBrightnessLevels array.
          This must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLcdBacklightValues">
-        <item>14</item>   <!-- 0-10 -->
-        <item>28</item>   <!-- 10-50 -->
-        <item>37</item>   <!-- 50-100 -->
-        <item>51</item>   <!-- 100-200 -->
-        <item>71</item>   <!-- 200-400 -->
-        <item>80</item>   <!-- 400-500 -->
-        <item>96</item>   <!-- 500-800 -->
-        <item>108</item>  <!-- 800-1000 -->
-        <item>144</item>  <!-- 1000-1600 -->
-        <item>181</item>  <!-- 1600-3000 -->
-        <item>254</item>  <!-- 3000-10000 -->
-        <item>255</item>  <!-- 10000+ -->
+        <item>20</item>
+        <item>66</item>
+        <item>126</item>
+        <item>250</item>
     </integer-array>
 
     <!-- Array of output values for button backlight corresponding to the LUX values
@@ -146,23 +138,15 @@
          than the size of the config_autoBrightnessLevels array.
          This must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessButtonBacklightValues">
-        <item>14</item>   <!-- 0-10 -->
-        <item>28</item>   <!-- 10-50 -->
-        <item>37</item>   <!-- 50-100 -->
-        <item>51</item>   <!-- 100-200 -->
-        <item>71</item>   <!-- 200-400 -->
-        <item>80</item>   <!-- 400-500 -->
-        <item>96</item>   <!-- 500-800 -->
-        <item>108</item>  <!-- 800-1000 -->
-        <item>144</item>  <!-- 1000-1600 -->
-        <item>181</item>  <!-- 1600-3000 -->
-        <item>254</item>  <!-- 3000-10000 -->
-        <item>255</item>  <!-- 10000+ -->
+        <item>20</item>
+        <item>66</item>
+        <item>126</item>
+        <item>250</item>
     </integer-array>
 
     <!-- Minimum screen brightness setting allowed by the power manager.
          The user is forbidden from setting the brightness below this level. -->
-    <integer name="config_screenBrightnessSettingMinimum">2</integer>
+    <integer name="config_screenBrightnessSettingMinimum">10</integer>
 
     <!-- Maximum screen brightness allowed by the power manager.
          The user is forbidden from setting the brightness above this level. -->
@@ -170,12 +154,12 @@
 
     <!-- Default screen brightness setting.
          Must be in the range specified by minimum and maximum. -->
-    <integer name="config_screenBrightnessSettingDefault">255</integer>
+    <integer name="config_screenBrightnessSettingDefault">120</integer>
 
     <!-- Screen brightness used to dim the screen when the user activity
          timeout expires.  May be less than the minimum allowed brightness setting
          that can be set by the user. -->
-    <integer name="config_screenBrightnessDim">20</integer>
+    <integer name="config_screenBrightnessDim">10</integer>
 
     <!-- Show translucent status bar on lockscreen by default -->
     <bool name="config_enableLockScreenTranslucentDecor">true</bool>
@@ -197,14 +181,13 @@
          should be empty.  An example would be "softap.*" -->
     <string-array translatable="false" name="config_tether_wifi_regexs">
         <item>"wlan0"</item>
-        <item>"softap.*"</item>
     </string-array>
 
     <!-- List of regexpressions describing the interface (if any) that represent tetherable
          bluetooth interfaces.  If the device doesn't want to support tethering over bluetooth this
          should be empty. -->
     <string-array translatable="false" name="config_tether_bluetooth_regexs">
-           <item>"bt-pan"</item>
+           <item>"bnep\\d"</item>
     </string-array>
 
     <!-- Array of allowable ConnectivityManager network types for tethering -->

@@ -37,4 +37,5 @@ PRODUCT_BRAND := Nubia
 PRODUCT_MODEL := NX403A
 PRODUCT_MANUFACTURER := nubia
 
+$(call inherit-product-if-exists, device/nubia/nx403a/gapps-vendor.mk)
 $(call inherit-product-if-exists, vendor/nubia/nx403a/nx403a-vendor.mk)

@@ -141,6 +141,7 @@ lib/libgemini.so
 lib/libgps.utils.so
 lib/libgsl.so
 lib/libidl.so
+lib/libimage-jpeg-dec-omx-comp.so
 lib/libimage-jpeg-enc-omx-comp.so
 lib/libimage-omx-common.so
 lib/libllvm-a3xx.so
@@ -148,6 +149,7 @@ lib/libloc_adapter.so
 lib/libloc_api_v02.so
 lib/libloc_eng.so
 lib/libloc_ext.so
+lib/liblocationservice.so
 lib/libmercury.so
 lib/libmmcamera_3a_legacy.so
 lib/libmmcamera_faceproc.so

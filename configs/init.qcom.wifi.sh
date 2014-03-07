@@ -213,6 +213,7 @@ case "$target" in
         #rm  /system/lib/modules/wlan.ko
         #ln -s /system/lib/modules/prima/prima_wlan.ko /system/lib/modules/wlan.ko
         #ln -s /system/lib/modules/prima/cfg80211.ko /system/lib/modules/cfg80211.ko
+        ln -s /persist/WCNSS_qcom_cfg.ini /system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini
         # Populate the writable driver configuration file
         if [ ! -e /data/misc/wifi/WCNSS_qcom_cfg.ini ]; then
             if [ -f /persist/WCNSS_qcom_cfg.ini ]; then
