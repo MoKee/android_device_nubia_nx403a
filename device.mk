@@ -101,7 +101,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += $(LOCAL_PATH)/prebuilt/sdcard:system/bin/sdcard
 
 # prebuilt libcsd-client.so
-PRODUCT_COPY_FILES += $(LOCAL_PATH)/prebuilt/libcsd-client.so:system/bin/libcsd-client.so
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/prebuilt/libcsd-client.so:system/lib/libcsd-client.so
 
 # GPS Location
 PRODUCT_COPY_FILES += \
