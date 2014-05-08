@@ -1,0 +1,40 @@
+diff --git a/src/java/com/android/internal/telephony/MccTable.java b/src/java/com/android/internal/telephony/MccTable.java
+index c57a8c4..8fc2355 100644
+--- a/src/java/com/android/internal/telephony/MccTable.java
++++ b/src/java/com/android/internal/telephony/MccTable.java
+@@ -190,7 +190,7 @@ public final class MccTable
+             if (mcc != 0) {
+                 setTimezoneFromMccIfNeeded(context, mcc);
+                 locale = getLocaleFromMcc(context, mcc);
+-                setWifiCountryCodeFromMcc(context, mcc);
++            //    setWifiCountryCodeFromMcc(context, mcc);
+             }
+             try {
+                 Configuration config = new Configuration();
+diff --git a/src/java/com/android/internal/telephony/RIL.java b/src/java/com/android/internal/telephony/RIL.java
+index 6859f52..00ef3fb 100644
+--- a/src/java/com/android/internal/telephony/RIL.java
++++ b/src/java/com/android/internal/telephony/RIL.java
+@@ -3271,6 +3271,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
+ 
+         if (!oldRil)
+             cardStatus.mImsSubscriptionAppIndex = p.readInt();
++			
++        int pin1 = p.readInt();
++        int pin2 = p.readInt();
+ 
+         int numApplications = p.readInt();
+ 
+diff --git a/src/java/com/android/internal/telephony/Phone.java b/src/java/com/androi
+index c42beda..857a342 100644
+--- a/src/java/com/android/internal/telephony/Phone.java
++++ b/src/java/com/android/internal/telephony/Phone.java
+@@ -144,7 +144,7 @@ public interface Phone {
+     static final int CDMA_SUBSCRIPTION_RUIM_SIM = 0; // RUIM/SIM (default)
+     static final int CDMA_SUBSCRIPTION_NV       = 1; // NV -> non-volatile memory
+
+-    static final int PREFERRED_CDMA_SUBSCRIPTION = CDMA_SUBSCRIPTION_NV;
++    static final int PREFERRED_CDMA_SUBSCRIPTION = CDMA_SUBSCRIPTION_RUIM_SIM;
+
+     static final int TTY_MODE_OFF = 0;
+     static final int TTY_MODE_FULL = 1;

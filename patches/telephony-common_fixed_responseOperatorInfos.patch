@@ -1,0 +1,31 @@
+diff --git a/src/java/com/android/internal/telephony/RIL.java b/src/java/com/android/internal/telephony/RIL.java
+index ca5c267..c949245 100644
+--- a/src/java/com/android/internal/telephony/RIL.java
++++ b/src/java/com/android/internal/telephony/RIL.java
+@@ -252,7 +252,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
+     // Number of per-network elements expected in QUERY_AVAILABLE_NETWORKS's response.
+     // 4 elements is default, but many RILs actually return 5, making it impossible to
+     // divide the response array without prior knowledge of the number of elements.
+-    protected int mQANElements = 4;
++    protected int mQANElements = 5;
+ 
+     //***** Events
+ 
+@@ -3480,7 +3483,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
+     protected Object
+     responseOperatorInfos(Parcel p) {
+         String strings[] = (String [])responseStrings(p);
+-        ArrayList<OperatorInfo> ret;
+ 
+         if (strings.length % mQANElements != 0) {
+             throw new RuntimeException(
+@@ -3488,7 +3490,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
+                 + strings.length + " strings, expected multiple of " + mQANElements);
+         }
+ 
+-        ret = new ArrayList<OperatorInfo>(strings.length / mQANElements);
++        ArrayList<OperatorInfo> ret = new ArrayList<OperatorInfo>(strings.length / mQANElements);
+ 
+         for (int i = 0 ; i < strings.length ; i += mQANElements) {
+             ret.add (
+
