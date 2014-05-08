@@ -74,7 +74,7 @@ case "$target" in
      echo 50000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
      echo 90 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold
      echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
-     echo 4 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
+     echo 2 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
      echo 384000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
      echo 384000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
      chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
@@ -115,43 +115,39 @@ case "$target" in
          echo 1 > /sys/devices/system/cpu/cpu1/online
          echo 1 > /sys/devices/system/cpu/cpu2/online
          echo 1 > /sys/devices/system/cpu/cpu3/online
-         #echo "ondemand" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-         #echo "ondemand" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
-         #echo "ondemand" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
-         #echo "ondemand" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
-         #echo 50000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
-         #echo 90 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold
-         #echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
-         #echo 4 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
-         #echo 10 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential
-         #echo 70 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_multi_core
-         #echo 3 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential_multi_core
-         #echo 918000 > /sys/devices/system/cpu/cpufreq/ondemand/optimal_freq
-         #echo 1026000 > /sys/devices/system/cpu/cpufreq/ondemand/sync_freq
-         #echo 80 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_any_cpu_load
-         #chown system /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
-         #chown system /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
-         #chown system /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
-         #echo 384000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
-         #echo 384000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
-         #echo 384000 > /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
-         #echo 384000 > /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq
-         #chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
-         #chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
-         #chown system /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
-         #chown system /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
-         #chown system /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
-         #chown system /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
-         #chown system /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
-         #chown system /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq
-         echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-         echo "interactive" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
-         echo "interactive" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
-         echo "interactive" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
-         echo 100000 > /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
-         echo 80 > /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
-         echo 40000 > /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
-         echo 1 > /sys/module/msm_thermal/core_control/enabled
+         echo "ondemand" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+         echo "ondemand" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+         echo "ondemand" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+         echo "ondemand" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+         echo 50000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
+         echo 90 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold
+         echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
+         echo 2 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
+         echo 10 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential
+         echo 70 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_multi_core
+         echo 3 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential_multi_core
+         echo 918000 > /sys/devices/system/cpu/cpufreq/ondemand/optimal_freq
+         echo 80 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_any_cpu_load
+         echo 1134000 > /sys/devices/system/cpu/cpufreq/ondemand/input_boost
+         echo 1026000 > /sys/module/cpu_boost/parameters/sync_threshold
+         echo 20 > /sys/module/cpu_boost/parameters/boost_ms
+         echo 1 > /dev/cpuctl/apps/cpu.notify_on_migrate
+         chown system /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
+         chown system /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
+         chown system /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
+         echo 384000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+         echo 384000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
+         echo 384000 > /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+         echo 384000 > /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq
+         chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+         chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+         chown system /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
+         chown system /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
+         chown system /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+         chown system /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+         chown system /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
+         chown system /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq
+	 echo 1 > /sys/module/msm_thermal/core_control/enabled
          chown root.system /sys/devices/system/cpu/mfreq
          chmod 220 /sys/devices/system/cpu/mfreq
          chown root.system /sys/devices/system/cpu/cpu1/online
@@ -275,7 +271,7 @@ case "$target" in
         echo 50000 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
         echo 90 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold
         echo 1 > /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
-        echo 4 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
+        echo 2 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
         echo 10 > /sys/devices/system/cpu/cpufreq/ondemand/down_differential
         echo 300000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
         echo 300000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq

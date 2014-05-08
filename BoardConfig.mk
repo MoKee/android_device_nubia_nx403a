@@ -1,15 +1,22 @@
-# inherit from the proprietary version
--include vendor/nubia/nx403a/BoardConfigVendor.mk
+# Copyright (C) 2013 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+TARGET_SPECIFIC_HEADER_PATH := device/nubia/nx403a/include
 
 # Flags
 TARGET_GLOBAL_CFLAGS += -mfpu=neon-vfpv4 -mfloat-abi=softfp
 TARGET_GLOBAL_CPPFLAGS += -mfpu=neon-vfpv4 -mfloat-abi=softfp
-
-TARGET_SPECIFIC_HEADER_PATH := device/nubia/nx403a/include
-
-# Kernel inline build
-TARGET_KERNEL_SOURCE := kernel/nubia/nx403a
-TARGET_KERNEL_CONFIG := nx403_defconfig
 
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true
@@ -48,10 +55,12 @@ BOARD_LIB_DUMPSTATE        := libdumpstate.nx403a
 BOARD_EGL_CFG              := device/nubia/nx403a/configs/egl.cfg
 
 # Kernel 
-BOARD_KERNEL_CMDLINE  := console=null androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 maxcpus=4 androidboot.selinux=permissive
 BOARD_KERNEL_BASE     := 0x80200000
 BOARD_KERNEL_PAGESIZE := 2048
+BOARD_KERNEL_CMDLINE  := console=null androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 maxcpus=4 androidboot.selinux=permissive
 BOARD_MKBOOTIMG_ARGS  := --ramdisk_offset 0x02000000
+TARGET_KERNEL_CONFIG := nx403_defconfig
+TARGET_KERNEL_SOURCE := kernel/nubia/nx403a
 
 # Filesystem
 BOARD_HAS_LARGE_FILESYSTEM         := true
@@ -86,9 +95,6 @@ NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 
 # Compatibility with pre-kitkat Qualcomm sensor HALs
 SENSORS_NEED_SETRATE_ON_ENABLE := true
-
-# Camera
-COMMON_GLOBAL_CFLAGS += -DDISABLE_HW_ID_MATCH_CHECK -DQCOM_BSP_CAMERA_ABI_HACK -DNEEDS_VECTORIMPL_SYMBOLS
 
 # Webkit
 ENABLE_WEBGL            := true
@@ -144,6 +150,7 @@ RECOVERY_GRAPHICS_USE_LINELENGTH := true
 USE_CAMERA_STUB                      := false
 USE_DEVICE_SPECIFIC_CAMERA           := true
 USE_DEVICE_SPECIFIC_QCOM_PROPRIETARY := true
+COMMON_GLOBAL_CFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS -DQCOM_BSP_CAMERA_ABI_HACK -DDISABLE_HW_ID_MATCH_CHECK
 
 HAVE_ADRENO_SOURCE:= false
 
@@ -170,3 +177,6 @@ BOARD_SEPOLICY_UNION := \
        system.te \
        ueventd.te \
        wpa.te
+
+# inherit from the proprietary version
+-include vendor/nubia/nx403a/BoardConfigVendor.mk

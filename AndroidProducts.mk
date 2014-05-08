@@ -1,2 +1,2 @@
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/cm_nx403a.mk
+    $(LOCAL_DIR)/full_nx403a.mk
