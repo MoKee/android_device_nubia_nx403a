@@ -18,11 +18,6 @@ TARGET_SPECIFIC_HEADER_PATH := device/nubia/nx403a/include
 TARGET_GLOBAL_CFLAGS += -mfpu=neon-vfpv4 -mfloat-abi=softfp
 TARGET_GLOBAL_CPPFLAGS += -mfpu=neon-vfpv4 -mfloat-abi=softfp
 
-# QCOM hardware
-BOARD_USES_QCOM_HARDWARE := true
-TARGET_USES_QCOM_BSP     := true
-COMMON_GLOBAL_CFLAGS     += -DQCOM_HARDWARE -DQCOM_BSP
-
 # Architecture
 TARGET_ARCH := arm
 TARGET_ARCH_VARIANT       := armv7-a-neon
@@ -52,7 +47,6 @@ TARGET_BOARD_INFO_FILE       := device/nubia/nx403a/board-info.txt
 TARGET_NO_RADIOIMAGE       := true
 BOARD_USES_SECURE_SERVICES := true
 BOARD_LIB_DUMPSTATE        := libdumpstate.nx403a
-BOARD_EGL_CFG              := device/nubia/nx403a/configs/egl.cfg
 
 # Kernel 
 BOARD_KERNEL_BASE     := 0x80200000
@@ -71,27 +65,29 @@ BOARD_SYSTEMIMAGE_PARTITION_SIZE   := 2147483648 # 2G
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 2859941888 # 2.66G
 BOARD_FLASH_BLOCK_SIZE             := 131072
 
-# Caf
-TARGET_QCOM_MEDIA_VARIANT   := caf
-TARGET_QCOM_DISPLAY_VARIANT := caf
-TARGET_QCOM_AUDIO_VARIANT   := caf
-
-# QCOM enhanced A/V
-TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
-
 # GPS
 BOARD_HAVE_NEW_QC_GPS := true
+
+# QCOM hardware
+BOARD_USES_QCOM_HARDWARE := true
+TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
+#COMMON_GLOBAL_CFLAGS     += -DQCOM_HARDWARE -DQCOM_BSP
+TARGET_QCOM_AUDIO_VARIANT   := caf
+TARGET_QCOM_DISPLAY_VARIANT := caf
+TARGET_QCOM_MEDIA_VARIANT   := caf
+TARGET_USES_QCOM_BSP     := true
 
 # Audio
 BOARD_USES_ALSA_AUDIO             := true
 BOARD_USES_LEGACY_ALSA_AUDIO      := true
 TARGET_USES_QCOM_COMPRESSED_AUDIO := true
 
-# Display
-TARGET_USES_ION             := true
+# Graphics
 USE_OPENGL_RENDERER         := true
+#NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 TARGET_USES_C2D_COMPOSITION := true
-NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
+TARGET_USES_ION := true
+BOARD_EGL_CFG := device/nubia/nx403a/configs/egl.cfg
 
 # Compatibility with pre-kitkat Qualcomm sensor HALs
 SENSORS_NEED_SETRATE_ON_ENABLE := true
