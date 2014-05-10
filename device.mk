@@ -321,11 +321,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=131072 \
     ro.sf.lcd_density=320
 
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.product.locale.language=zh \
-    ro.product.locale.region=CN \
-    persist.sys.timezone=Asia/Shanghai
-
 # selinux
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.build.selinux=1
