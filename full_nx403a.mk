@@ -25,6 +25,9 @@ PRODUCT_PACKAGES += \
         LiveWallpapersPicker \
         VisualizationWallpapers
 
+# Radio and Telephony
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.telephony.ril_class=ZTEQualcommUiccRIL
 
 # Get the long list of APNs
 PRODUCT_COPY_FILES := device/sample/etc/apns-full-conf.xml:system/etc/apns-conf.xml
