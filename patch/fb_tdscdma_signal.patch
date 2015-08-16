@@ -1,0 +1,26 @@
+From 457e725f0a7bbc93e8be679f336b8881db2b82c3 Mon Sep 17 00:00:00 2001
+From: Lisong Wang <imwls@qq.com>
+Date: Sat, 7 Mar 2015 16:51:37 +0800
+Subject: [PATCH] fixed TD-SCDMA signalstreagth
+
+Change-Id: Id0f533bf4b7c26784ad41a61bb782e94604012ae
+---
+ telephony/java/android/telephony/SignalStrength.java | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/telephony/java/android/telephony/SignalStrength.java b/telephony/java/android/telephony/SignalStrength.java
+index 37ec7e7..4c99d5b 100644
+--- a/telephony/java/android/telephony/SignalStrength.java
++++ b/telephony/java/android/telephony/SignalStrength.java
+@@ -319,6 +319,9 @@ public class SignalStrength implements Parcelable {
+         ss.mLteRsrq = in.readInt();
+         ss.mLteRssnr = in.readInt();
+         ss.mLteCqi = in.readInt();
++        // ignore the timingAdvance field since
++        // the frameworks is not utilizing this field
++        in.readInt();
+         ss.mTdScdmaRscp = in.readInt();
+         return ss;
+     }
+-- 
+2.1.0
