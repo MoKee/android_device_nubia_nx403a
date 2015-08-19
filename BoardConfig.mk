@@ -27,6 +27,9 @@ TARGET_KERNEL_SOURCE := kernel/nubia/nx403a
 TARGET_KERNEL_CONFIG := cm_nubiamini2_defconfig
 #TARGET_KERNEL_CUSTOM_TOOLCHAIN := arm-eabi-4.9
 
+# Use SaberMod Toolchains
+SABERMOD_TOOLCHAIN_ENABLED := true
+
 PRODUCT_COPY_FILES := $(filter-out frameworks/base/data/keyboards/Generic.kl:system/usr/keylayout/Generic.kl \
 	, $(PRODUCT_COPY_FILES))
 
