@@ -16,6 +16,8 @@
 # inherit from the proprietary version
 -include vendor/nubia/nx403a/BoardConfigVendor.mk
 
+MK_TOOLCHAIN_VARIANT := uber
+
 # Flags
 #TARGET_GLOBAL_CFLAGS += -mfpu=neon-vfpv4 -mfloat-abi=softfp
 #TARGET_GLOBAL_CPPFLAGS += -mfpu=neon-vfpv4 -mfloat-abi=softfp
